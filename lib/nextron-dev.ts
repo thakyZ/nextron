@@ -3,7 +3,7 @@ import execa from 'execa'
 import webpack from 'webpack'
 import * as logger from './logger'
 import { getNextronConfig } from './configs/getNextronConfig'
-import { config } from './configs/webpack.config.development'
+import { getConfig } from './configs/webpack.config.development'
 import { waitForPort } from 'get-port-please'
 import type { ChildProcess } from 'child_process'
 
@@ -40,12 +40,8 @@ if (args['--inspect']) {
   process.exit(1)
 }
 
-const nextronConfig = getNextronConfig()
 
-const rendererPort = args['--renderer-port'] || 8888
-const startupDelay =
-  nextronConfig.startupDelay || args['--startup-delay'] || 10_000
-
+const rendererPort = args['--renderer-port'] || 8888;
 let electronOptions = args['--electron-options'] || ''
 if (!electronOptions.includes('--remote-debugging-port')) {
   electronOptions += ' --remote-debugging-port=5858'
@@ -61,6 +57,10 @@ const execaOptions: execa.Options = {
 }
 
 ;(async () => {
+  const nextronConfig = await getNextronConfig();
+  const startupDelay =
+    nextronConfig.startupDelay || args['--startup-delay'] || 10_000
+
   let firstCompile = true
   let watching: webpack.Watching
   let mainProcess: ChildProcess
@@ -89,7 +89,7 @@ const execaOptions: execa.Options = {
     )
     const child = execa(
       'next',
-      ['-p', rendererPort, nextronConfig.rendererSrcDir || 'renderer'],
+      ['-p', rendererPort.toString(), nextronConfig.rendererSrcDir || 'renderer'],
       execaOptions
     )
     child.on('close', () => {
@@ -127,6 +127,8 @@ const execaOptions: execa.Options = {
     killWholeProcess()
     process.exit(1)
   })
+
+  const config = await getConfig()
 
   // wait until main process is ready
   await new Promise<void>((resolve) => {

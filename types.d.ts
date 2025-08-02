@@ -1,11 +1,11 @@
 declare module 'nextron';
 
-import type { Configuration } from "webpack";
+import type { Configuration as WebpackConfiguration } from "webpack";
 
 /**
  * The configuration interface for nextron.
  */
-export declare interface NextronConfig {
+export declare interface Configuration {
   /**
    * Specify an alternate main src directory, defaults to 'main'.
    */
@@ -27,5 +27,5 @@ export declare interface NextronConfig {
    * @param {'development'|'production'} mode A string specifying the build mode of the program.
    * @returns {import('webpack').Configuration} Returns an instance of the final configuration instance.
    */
-  webpack?: (config: Configuration, mode: 'development' | 'production') => Configuration;
+  webpack?: (config: WebpackConfiguration, mode: 'development' | 'production') => WebpackConfiguration;
 }

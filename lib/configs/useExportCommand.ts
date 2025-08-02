@@ -8,16 +8,16 @@ import * as logger from '../logger'
 
 const cwd = process.cwd()
 const pkgPath = path.join(cwd, 'package.json')
-const rendererSrcDir = getNextronConfig().rendererSrcDir || 'renderer'
-const nextConfigPath = (() => {
-  if (fs.existsSync(path.join(cwd, 'next.config.ts')))
-    return path.join(cwd, 'next.config.ts')
-  if (fs.existsSync(path.join(cwd, rendererSrcDir, 'next.config.ts')))
-    return path.join(cwd, rendererSrcDir, 'next.config.ts')
-  return path.join(cwd, rendererSrcDir, 'next.config.js')
-})()
 
 export const useExportCommand = async (): Promise<boolean> => {
+  const rendererSrcDir = (await getNextronConfig()).rendererSrcDir || 'renderer';
+  const nextConfigPath = (() => {
+    if (fs.existsSync(path.join(cwd, 'next.config.ts')))
+      return path.join(cwd, 'next.config.ts');
+    if (fs.existsSync(path.join(cwd, rendererSrcDir, 'next.config.ts')))
+      return path.join(cwd, rendererSrcDir, 'next.config.ts');
+    return path.join(cwd, rendererSrcDir, 'next.config.js')
+  })();
   const { dependencies, devDependencies } = await fs.readJSON(pkgPath)
 
   let nextVersion: string
