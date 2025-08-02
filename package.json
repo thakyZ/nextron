@@ -29,8 +29,10 @@
   },
   "files": [
     "bin",
-    "babel.js"
+    "babel.js",
+    "types.d.ts"
   ],
+  "types": "types.d.ts",
   "bin": {
     "nextron": "bin/nextron.js"
   },
