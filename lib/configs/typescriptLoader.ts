@@ -32,7 +32,7 @@ function TypeScriptLoader(options?: JitiOptions): LoaderAsync {
 }
 
 export async function loadScriptFile<T = any>(filePath: string): Promise<T> {
-  if (path.extname(filePath) === '.js' || path.extname(filePath) === '.mjs' || path.extname(filePath) === '.cjs') {
+  if (['.js', '.mjs', '.cjs'].includes(path.extname(filePath))) {
     return require(filePath) as T
   }
   return TypeScriptLoader()(filePath) as T
