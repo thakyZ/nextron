@@ -73,6 +73,6 @@ export const useExportCommand = async (): Promise<boolean> => {
     return false
   }
 
-  logger.error('Unexpected error occerred')
+  logger.error('Unexpected error occurred')
   process.exit(1)
 }
